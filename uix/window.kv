@@ -1,0 +1,78 @@
+<MenuBar@ActionGroup>
+    ActionButton:
+        text: 'Reset'
+        on_press: app.reset()
+
+
+<LLabel@Label>:
+    halign: 'right'
+    text_size: (self.width, None)
+
+
+<RLabel@Label>:
+    bold: True
+    markup: True
+    text: f'{app.bets.ZERO}'
+    text_size: (self.width, None)
+
+
+<SToggleButton@ToggleButton>:
+    text: 'Red'
+    bold: True
+    group: 'zero'
+    sector: app.RED_SECTOR
+    background_color: (2, 0, 0, 1)
+    on_press: if self.state == 'down': app.bet_sector = self.sector
+    on_release: if self.state == 'normal': app.bet_sector = app.GREEN_SECTOR
+
+
+<RootWindow@BoxLayout>:
+    orientation: 'vertical'
+    spacing: 10
+    padding: 10
+
+    PanelBar
+
+    GridLayout:
+        cols: 2
+        spacing: 5
+        size_hint_y: None
+        height: self.minimum_height
+        row_force_default: True
+        row_default_height: 30
+
+        LLabel:
+            text: f'{app.bets.CURRENT_BALANCE_STR.capitalize()}:'
+
+        RLabel:
+            id: cur_balance
+
+        LLabel:
+            text: 'Result status:'
+
+        RLabel:
+            id: result_status
+
+        LLabel:
+            text: f'{app.bets.MINIMUM_BET_STR.capitalize()}:'
+
+        TextInput:
+            id: min_bet
+            hint_text: 'Press Enter'
+            focus: True
+            unfocus_on_touch: False
+            text_validate_unfocus: False
+            multiline: False
+            input_filter: 'float'
+            on_text: app.show_bets()
+            on_text_validate: app.play_bets()
+
+        SToggleButton
+
+        SToggleButton:
+            text: 'Black'
+            sector: app.BLACK_SECTOR
+            background_color: (0.2, 0.2, 0.2, 1)
+
+    RstDocument:
+        id: bets
